@@ -1,0 +1,48 @@
+sudo yum install filebeat
+sudo vi /etc/filebeat/filebeat.yml
+  …
+#output.elasticsearch:
+  # Array of hosts to connect to.
+  #hosts: ["localhost:9200"]
+…
+  output.logstash:
+  # The Logstash hosts
+  hosts: ["localhost:5044"]
+  
+  sudo filebeat modules enable system
+  sudo filebeat modules list
+  
+  Enabled:
+system
+
+Disabled:
+apache2
+auditd
+elasticsearch
+haproxy
+icinga
+iis
+kafka
+kibana
+logstash
+mongodb
+mysql
+nginx
+osquery
+postgresql
+redis
+suricata
+traefik
+
+sudo filebeat setup --template -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+#Output
+#Loaded index template
+
+
+sudo filebeat setup -e -E output.logstash.enabled=false -E output.elasticsearch.hosts=['localhost:9200'] -E setup.kibana.host=localhost:5601
+
+
+sudo systemctl start filebeat
+sudo systemctl enable filebeat
+
+curl -X GET 'http://localhost:9200/filebeat-*/_search?pretty'
